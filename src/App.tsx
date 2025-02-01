@@ -1,8 +1,13 @@
 import './App.css';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import SearchPage from './components/SearchPage/SearchPage';
 
 function App() {
-  return <SearchPage />;
+  return (
+    <ErrorBoundary>
+      <SearchPage />
+    </ErrorBoundary>
+  );
 }
 
 export default App;

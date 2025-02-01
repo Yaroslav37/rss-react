@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
-export default class ErrorButton extends Component {
+interface ErrorButtonProps {
+  onClick: () => void;
+}
+export default class ErrorButton extends Component<ErrorButtonProps> {
   render() {
-    return <button>ErrorButton</button>;
+    return <button onClick={this.props.onClick}>ErrorButton</button>;
   }
 }

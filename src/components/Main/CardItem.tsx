@@ -10,7 +10,7 @@ interface Card {
 export default class CardItem extends Component<Card> {
   render() {
     return (
-      <div>
+      <div style={{ display: 'flex', gap: '10px' }}>
         <div>{this.props.name}</div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <div>Gender: {this.props.gender}</div>

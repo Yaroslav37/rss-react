@@ -13,12 +13,14 @@ interface Card {
 interface SearchPageState {
   searchValue: string;
   results: Card[];
+  errorMessage: string | null;
 }
 
 export default class SearchPage extends Component {
   state: SearchPageState = {
     searchValue: this.getSearchValue(),
     results: [],
+    errorMessage: null,
   };
 
   getSearchValue(): string {
@@ -26,10 +28,6 @@ export default class SearchPage extends Component {
   }
 
   componentDidMount(): void {
-    // const searchValue = this.getSearchValue();
-    // if (searchValue) {
-    //   this.setState({ searchValue });
-    // }
     this.handleSearchSubmit();
   }
 
@@ -46,27 +44,40 @@ export default class SearchPage extends Component {
         `https://swapi.dev/api/people/?search=${searchValue}`
       );
 
-      if (!response.ok) {
+      if (response.ok) {
         throw new Error('Error');
       }
 
       const data = await response.json();
-      this.setState({ results: data.results });
+      this.setState({ results: data.results, errorMessage: null });
     } catch (error) {
+      this.setState({ errorMessage: 'Error fetching data' });
       console.error('Error fetching data:', error);
     }
   };
 
+  handleThrowError = () => {
+    this.setState(() => {
+      throw new Error('Test ErrorBoundary');
+    });
+  };
+
   render() {
     return (
-      <div>
+      <div style={{ height: '600px', width: '600px' }}>
         <Header
           searchValue={this.state.searchValue}
           onSearchChange={this.handleSearchChange}
           onSearchSubmit={this.handleSearchSubmit}
         />
-        <CardList results={this.state.results} />
-        <ErrorButton />
+        <div>
+          {this.state.errorMessage ? (
+            <div>{this.state.errorMessage}</div>
+          ) : (
+            <CardList results={this.state.results} />
+          )}
+        </div>
+        <ErrorButton onClick={this.handleThrowError} />
       </div>
     );
   }

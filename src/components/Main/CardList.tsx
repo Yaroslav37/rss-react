@@ -15,7 +15,7 @@ interface CardListProps {
 export default class CardList extends Component<CardListProps> {
   render() {
     return (
-      <div>
+      <div style={{ height: '300px' }}>
         {this.props.results.map((result: Card) => (
           <CardItem key={result.name} {...result} />
         ))}
