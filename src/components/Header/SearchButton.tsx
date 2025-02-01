@@ -1,7 +1,11 @@
 import { Component } from 'react';
 
-export default class SearchButton extends Component {
+interface SearchButtonProps {
+  onClick: () => void;
+}
+
+export default class SearchButton extends Component<SearchButtonProps> {
   render() {
-    return <button> Search</button>;
+    return <button onClick={this.props.onClick}> Search</button>;
   }
 }

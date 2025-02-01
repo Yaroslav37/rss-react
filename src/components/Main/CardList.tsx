@@ -1,7 +1,25 @@
 import { Component } from 'react';
+import CardItem from './CardItem';
 
-export default class CardList extends Component {
+interface Card {
+  name: string;
+  gender: string;
+  height: string;
+  mass: string;
+}
+
+interface CardListProps {
+  results: Card[];
+}
+
+export default class CardList extends Component<CardListProps> {
   render() {
-    return <div>CardList</div>;
+    return (
+      <div>
+        {this.props.results.map((result: Card) => (
+          <CardItem key={result.name} {...result} />
+        ))}
+      </div>
+    );
   }
 }
