@@ -1,10 +1,13 @@
 import { Component } from 'react';
+import './ErrorButton.css';
+import { ErrorButtonProps } from '../../types/types';
 
-interface ErrorButtonProps {
-  onClick: () => void;
-}
 export default class ErrorButton extends Component<ErrorButtonProps> {
   render() {
-    return <button onClick={this.props.onClick}>ErrorButton</button>;
+    return (
+      <button className="error-button" onClick={this.props.onClick}>
+        ErrorButton
+      </button>
+    );
   }
 }

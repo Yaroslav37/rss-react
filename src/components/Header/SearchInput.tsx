@@ -1,14 +1,12 @@
 import { Component } from 'react';
-
-interface SearchInputProps {
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import './Header.css';
+import { SearchInputProps } from '../../types/types';
 
 export default class SearchInput extends Component<SearchInputProps> {
   render() {
     return (
       <input
+        className="search-input"
         type="text"
         value={this.props.value}
         onChange={this.props.onChange}

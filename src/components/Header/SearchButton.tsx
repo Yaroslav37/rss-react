@@ -1,8 +1,5 @@
 import { Component } from 'react';
-
-interface SearchButtonProps {
-  onClick: () => void;
-}
+import { SearchButtonProps } from '../../types/types';
 
 export default class SearchButton extends Component<SearchButtonProps> {
   render() {

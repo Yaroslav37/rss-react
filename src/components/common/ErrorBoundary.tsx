@@ -1,12 +1,5 @@
-import React, { Component, ReactNode } from 'react';
-
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
-
-interface ErrorBoundaryProps {
-  children: ReactNode;
-}
+import React, { Component } from 'react';
+import { ErrorBoundaryProps, ErrorBoundaryState } from '../../types/types';
 
 export default class ErrorBoundary extends Component<ErrorBoundaryProps> {
   state: ErrorBoundaryState = {
@@ -23,7 +16,12 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps> {
 
   render() {
     if (this.state.hasError) {
-      return <h1>Ooops...</h1>;
+      return (
+        <div>
+          <h1>Ooops...</h1>
+          <p>Reload page</p>
+        </div>
+      );
     }
     return this.props.children;
   }

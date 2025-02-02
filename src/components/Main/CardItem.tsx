@@ -1,21 +1,16 @@
 import { Component } from 'react';
-
-interface Card {
-  name: string;
-  gender: string;
-  height: string;
-  mass: string;
-}
+import './Main.css';
+import { Card } from '../../types/types';
 
 export default class CardItem extends Component<Card> {
   render() {
     return (
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <div>{this.props.name}</div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <div>Gender: {this.props.gender}</div>
-          <div>Height: {this.props.height}cm</div>
-          <div>Weight: {this.props.mass}kg</div>
+      <div className="card-block">
+        <div className="card-name">{this.props.name}</div>
+        <div className="card-container">
+          <div className="card-item">Gender: {this.props.gender}</div>
+          <div className="card-item">Height: {this.props.height} cm</div>
+          <div className="card-item">Weight: {this.props.mass} kg</div>
         </div>
       </div>
     );
