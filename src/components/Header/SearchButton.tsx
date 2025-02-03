@@ -1,8 +1,9 @@
-import { Component } from 'react';
 import { SearchButtonProps } from '../../types/types';
 
-export default class SearchButton extends Component<SearchButtonProps> {
-  render() {
-    return <button onClick={this.props.onClick}> Search</button>;
-  }
-}
+const SearchButton: React.FC<SearchButtonProps> = ({
+  onClick,
+}: SearchButtonProps) => {
+  return <button onClick={onClick}> Search</button>;
+};
+
+export default SearchButton;

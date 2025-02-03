@@ -1,36 +1,34 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import CardList from '../Main/CardList';
 import ErrorButton from '../common/ErrorButton';
 import './SearchPage.css';
 import spinner from '../../assets/spinner.svg';
-import { SearchPageState } from '../../types/types';
 
-export default class SearchPage extends Component {
-  state: SearchPageState = {
-    searchValue: this.getSearchValue(),
-    results: [],
-    errorMessage: null,
-    isLoading: false,
-  };
+const SearchPage: React.FC = () => {
+  const [searchValue, setSearchValue] = useState(() => getSearchValue());
+  const [results, setResults] = useState([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [shouldThrow, setShouldThrow] = useState(false);
 
-  getSearchValue(): string {
+  useEffect(() => {
+    //useMemo
+    handleSearchSubmit();
+  }, []);
+
+  function getSearchValue(): string {
     return localStorage.getItem('searchValue') || '';
   }
 
-  componentDidMount(): void {
-    this.handleSearchSubmit();
-  }
-
-  handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = event.target.value;
-    this.setState({ searchValue: searchValue });
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
   };
 
-  handleSearchSubmit = async () => {
-    this.setState({ isLoading: true });
+  const handleSearchSubmit = async () => {
+    setIsLoading(true);
     try {
-      const searchValue = this.state.searchValue.trim();
+      setSearchValue(searchValue.trim());
       localStorage.setItem('searchValue', searchValue);
 
       const url = searchValue
@@ -44,47 +42,42 @@ export default class SearchPage extends Component {
       }
 
       const data = await response.json();
-      this.setState({
-        results: data.results,
-        errorMessage: null,
-        isLoading: false,
-      });
+      setResults(data.results);
+      setIsLoading(false);
+      setErrorMessage(null); //mb ubrat
     } catch (error) {
-      this.setState({
-        results: [],
-        errorMessage: `Ошибка при получении данных: ${(error as Error).message}`,
-        isLoading: false,
-      });
+      setResults([]);
+      setErrorMessage(
+        `Ошибка при получении данных: ${(error as Error).message}`
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  handleThrowError = () => {
-    this.setState(() => {
-      throw new Error('Test ErrorBoundary');
-    });
-  };
-
-  render() {
-    const { isLoading, results, errorMessage } = this.state;
-
-    return (
-      <div className="container">
-        <Header
-          searchValue={this.state.searchValue}
-          onSearchChange={this.handleSearchChange}
-          onSearchSubmit={this.handleSearchSubmit}
-        />
-        <div className="results">
-          {isLoading ? (
-            <img src={spinner} />
-          ) : errorMessage ? (
-            <div>{errorMessage}</div>
-          ) : (
-            <CardList results={results} />
-          )}
-        </div>
-        <ErrorButton onClick={this.handleThrowError} />
-      </div>
-    );
+  if (shouldThrow) {
+    throw new Error('Test ErrorBoundary');
   }
-}
+
+  return (
+    <div className="container">
+      <Header
+        searchValue={searchValue}
+        onSearchChange={(e) => handleSearchChange(e)}
+        onSearchSubmit={() => handleSearchSubmit()}
+      />
+      <div className="results">
+        {isLoading ? (
+          <img src={spinner} />
+        ) : errorMessage ? (
+          <div>{errorMessage}</div>
+        ) : (
+          <CardList results={results} />
+        )}
+      </div>
+      <ErrorButton onClick={() => setShouldThrow(true)} />
+    </div>
+  );
+};
+
+export default SearchPage;
