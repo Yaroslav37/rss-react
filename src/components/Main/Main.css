@@ -1,8 +1,8 @@
-.card-item{
+.card-item {
   border-radius: 1px white;
 }
 
-.card-list{
+.card-list {
   display: flex;
   gap: 10px;
   flex-direction: column;
@@ -23,20 +23,19 @@
   text-align: left;
 }
 
-.card-name{
+.card-name {
   align-items: start;
   text-align: left;
   font-size: 20px;
   font-weight: bold;
   padding-left: 50px;
-  color: #9DD9EE;
+  color: #9dd9ee;
 }
 
-.card-block{
+.card-block {
   padding: 10px 0;
 }
 
-.card-block:hover{
+.card-block:hover {
   background-color: gray;
 }
-

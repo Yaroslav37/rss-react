@@ -32,9 +32,12 @@ export default class SearchPage extends Component {
     try {
       const searchValue = this.state.searchValue.trim();
       localStorage.setItem('searchValue', searchValue);
-      const response = await fetch(
-        `https://swapi.dev/api/people/?search=${searchValue}`
-      );
+
+      const url = searchValue
+        ? `https://swapi.dev/api/people/?search=${searchValue}`
+        : `https://swapi.dev/api/people/`;
+
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
@@ -48,11 +51,10 @@ export default class SearchPage extends Component {
       });
     } catch (error) {
       this.setState({
-        results: `Ошибка при получении данных: ${(error as Error).message}`,
-        errorMessage: null,
+        results: [],
+        errorMessage: `Ошибка при получении данных: ${(error as Error).message}`,
         isLoading: false,
       });
-      console.error('Error fetching data:', error);
     }
   };
 
@@ -63,6 +65,8 @@ export default class SearchPage extends Component {
   };
 
   render() {
+    const { isLoading, results, errorMessage } = this.state;
+
     return (
       <div className="container">
         <Header
@@ -71,12 +75,12 @@ export default class SearchPage extends Component {
           onSearchSubmit={this.handleSearchSubmit}
         />
         <div className="results">
-          {this.state.isLoading ? (
+          {isLoading ? (
             <img src={spinner} />
-          ) : typeof this.state.results === 'string' ? (
-            <div>{this.state.results}</div>
+          ) : errorMessage ? (
+            <div>{errorMessage}</div>
           ) : (
-            <CardList results={this.state.results} />
+            <CardList results={results} />
           )}
         </div>
         <ErrorButton onClick={this.handleThrowError} />

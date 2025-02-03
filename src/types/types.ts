@@ -9,7 +9,7 @@ export interface Card {
 
 export interface SearchPageState {
   searchValue: string;
-  results: Card[] | string;
+  results: Card[];
   errorMessage: string | null;
   isLoading: boolean;
 }

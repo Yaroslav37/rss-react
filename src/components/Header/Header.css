@@ -1,17 +1,17 @@
-.header{
+.header {
   display: flex;
   justify-content: space-between;
   width: 600px;
   align-items: center;
 }
 
-.search-input{
+.search-input {
   width: 450px;
   height: 32px;
   border-radius: 8px;
   padding: 0 16px;
 }
 
-.search-button{
+.search-button {
   height: 2rem;
 }
