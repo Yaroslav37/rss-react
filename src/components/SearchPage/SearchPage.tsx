@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Header from '../Header/Header';
 import CardList from '../Main/CardList';
 import ErrorButton from '../common/ErrorButton';
@@ -12,27 +12,16 @@ const SearchPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [shouldThrow, setShouldThrow] = useState(false);
 
-  useEffect(() => {
-    //useMemo
-    handleSearchSubmit();
-  }, []);
-
-  function getSearchValue(): string {
-    return localStorage.getItem('searchValue') || '';
-  }
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  };
-
-  const handleSearchSubmit = async () => {
+  const handleSearchSubmit = useCallback(async () => {
+    console.log('handleSearchSubmit created');
     setIsLoading(true);
     try {
-      setSearchValue(searchValue.trim());
-      localStorage.setItem('searchValue', searchValue);
+      const trimmedSearchValue = searchValue.trim();
+      setSearchValue(trimmedSearchValue);
+      localStorage.setItem('searchValue', trimmedSearchValue);
 
-      const url = searchValue
-        ? `https://swapi.dev/api/people/?search=${searchValue}`
+      const url = trimmedSearchValue
+        ? `https://swapi.dev/api/people/?search=${trimmedSearchValue}`
         : `https://swapi.dev/api/people/`;
 
       const response = await fetch(url);
@@ -43,8 +32,7 @@ const SearchPage: React.FC = () => {
 
       const data = await response.json();
       setResults(data.results);
-      setIsLoading(false);
-      setErrorMessage(null); //mb ubrat
+      setErrorMessage(null);
     } catch (error) {
       setResults([]);
       setErrorMessage(
@@ -53,6 +41,18 @@ const SearchPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  }, [searchValue]);
+
+  useEffect(() => {
+    handleSearchSubmit();
+  }, [handleSearchSubmit]);
+
+  function getSearchValue(): string {
+    return localStorage.getItem('searchValue') || '';
+  }
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
   };
 
   if (shouldThrow) {
