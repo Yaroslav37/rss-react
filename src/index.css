@@ -50,3 +50,21 @@ button {
     background-color: #f9f9f9;
   }
 }
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.pagination button.active{
+  background-color: #747bff;
+  color: #fff;
+  border-color: #747bff;
+  cursor: default;
+}
+
+.pagination button.inactive{
+  visibility: hidden;
+}
+

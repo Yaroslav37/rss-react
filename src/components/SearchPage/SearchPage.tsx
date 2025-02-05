@@ -1,19 +1,24 @@
 import { useEffect, useState, useCallback } from 'react';
 import Header from '../Header/Header';
 import CardList from '../Main/CardList';
+import { Card } from '../../types/types';
 import ErrorButton from '../common/ErrorButton';
 import './SearchPage.css';
 import spinner from '../../assets/spinner.svg';
+import Pagintaion from '../Pagination/Pagintaion';
 
 const SearchPage: React.FC = () => {
   const [searchValue, setSearchValue] = useState(() => getSearchValue());
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Card[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [shouldThrow, setShouldThrow] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
   const handleSearchSubmit = useCallback(async () => {
-    console.log('handleSearchSubmit created');
+    console.log(currentPage);
     setIsLoading(true);
     try {
       const trimmedSearchValue = searchValue.trim();
@@ -21,8 +26,8 @@ const SearchPage: React.FC = () => {
       localStorage.setItem('searchValue', trimmedSearchValue);
 
       const url = trimmedSearchValue
-        ? `https://swapi.dev/api/people/?search=${trimmedSearchValue}`
-        : `https://swapi.dev/api/people/`;
+        ? `https://swapi.dev/api/people/?search=${trimmedSearchValue}&page=${currentPage}`
+        : `https://swapi.dev/api/people/?page=${currentPage}`;
 
       const response = await fetch(url);
 
@@ -32,6 +37,8 @@ const SearchPage: React.FC = () => {
 
       const data = await response.json();
       setResults(data.results);
+      console.log(results);
+      setTotalItems(data.count);
       setErrorMessage(null);
     } catch (error) {
       setResults([]);
@@ -41,7 +48,7 @@ const SearchPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [searchValue]);
+  }, [currentPage]);
 
   useEffect(() => {
     handleSearchSubmit();
@@ -75,6 +82,12 @@ const SearchPage: React.FC = () => {
           <CardList results={results} />
         )}
       </div>
+      <Pagintaion
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
       <ErrorButton onClick={() => setShouldThrow(true)} />
     </div>
   );
