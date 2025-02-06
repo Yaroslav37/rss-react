@@ -1,11 +1,11 @@
-import { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import CardList from '../Main/CardList';
 import { Card } from '../../types/types';
 import ErrorButton from '../common/ErrorButton';
 import './SearchPage.css';
 import spinner from '../../assets/spinner.svg';
-import Pagintaion from '../Pagination/Pagintaion';
+import Pagination from '../Pagination/Pagintaion';
 
 const SearchPage: React.FC = () => {
   const [searchValue, setSearchValue] = useState(() => getSearchValue());
@@ -17,17 +17,18 @@ const SearchPage: React.FC = () => {
   const [itemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
 
-  const handleSearchSubmit = useCallback(async () => {
-    console.log(currentPage);
+  const fetchData = useCallback(async (searchQuery: string, page: number) => {
     setIsLoading(true);
     try {
-      const trimmedSearchValue = searchValue.trim();
-      setSearchValue(trimmedSearchValue);
-      localStorage.setItem('searchValue', trimmedSearchValue);
+      const trimmedSearchValue = searchQuery.trim();
+      const baseUrl = 'https://swapi.dev/api/people/';
+      const params = new URLSearchParams();
 
-      const url = trimmedSearchValue
-        ? `https://swapi.dev/api/people/?search=${trimmedSearchValue}&page=${currentPage}`
-        : `https://swapi.dev/api/people/?page=${currentPage}`;
+      if (page > 1) params.append('page', page.toString());
+      if (trimmedSearchValue) params.append('search', trimmedSearchValue);
+
+      const url = params.toString() ? `${baseUrl}?${params}` : baseUrl;
+      console.log(url);
 
       const response = await fetch(url);
 
@@ -37,7 +38,6 @@ const SearchPage: React.FC = () => {
 
       const data = await response.json();
       setResults(data.results);
-      console.log(results);
       setTotalItems(data.count);
       setErrorMessage(null);
     } catch (error) {
@@ -48,18 +48,27 @@ const SearchPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage]);
+  }, []);
 
   useEffect(() => {
-    handleSearchSubmit();
-  }, [handleSearchSubmit]);
+    const LsSearchValue = getSearchValue();
+    setSearchValue(LsSearchValue);
+    fetchData(LsSearchValue, 1);
+  }, [fetchData]);
 
   function getSearchValue(): string {
     return localStorage.getItem('searchValue') || '';
   }
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
+  const handleSearchButtonClick = () => {
+    setCurrentPage(1);
+    localStorage.setItem('searchValue', searchValue);
+    fetchData(searchValue, 1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchData(searchValue, page);
   };
 
   if (shouldThrow) {
@@ -70,23 +79,23 @@ const SearchPage: React.FC = () => {
     <div className="container">
       <Header
         searchValue={searchValue}
-        onSearchChange={(e) => handleSearchChange(e)}
-        onSearchSubmit={() => handleSearchSubmit()}
+        onSearchChange={(e) => setSearchValue(e.target.value)}
+        onSearchSubmit={handleSearchButtonClick}
       />
       <div className="results">
         {isLoading ? (
-          <img src={spinner} />
+          <img src={spinner} alt="Loading..." />
         ) : errorMessage ? (
           <div>{errorMessage}</div>
         ) : (
           <CardList results={results} />
         )}
       </div>
-      <Pagintaion
+      <Pagination
         totalItems={totalItems}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        handlePageChange={handlePageChange}
       />
       <ErrorButton onClick={() => setShouldThrow(true)} />
     </div>

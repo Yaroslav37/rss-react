@@ -4,13 +4,13 @@ interface PagintaionProps {
   totalItems: number;
   itemsPerPage: number;
   currentPage: number;
-  setCurrentPage: (page: number) => void;
+  handlePageChange: (page: number) => void;
 }
 const Pagintaion: React.FC<PagintaionProps> = ({
   totalItems,
   itemsPerPage,
   currentPage,
-  setCurrentPage,
+  handlePageChange,
 }: PagintaionProps) => {
   const pages = [];
 
@@ -21,7 +21,7 @@ const Pagintaion: React.FC<PagintaionProps> = ({
   return (
     <div className="pagination">
       <button
-        onClick={() => setCurrentPage(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className={currentPage === 1 ? 'inactive' : ''}
       >
@@ -31,7 +31,7 @@ const Pagintaion: React.FC<PagintaionProps> = ({
         return (
           <button
             key={index}
-            onClick={() => setCurrentPage(page)}
+            onClick={() => handlePageChange(page)}
             className={currentPage === page ? 'active' : ''}
           >
             {page}
@@ -39,7 +39,7 @@ const Pagintaion: React.FC<PagintaionProps> = ({
         );
       })}
       <button
-        onClick={() => setCurrentPage(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === pages.length}
         className={currentPage === pages.length ? 'inactive' : ''}
       >
