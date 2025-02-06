@@ -8,14 +8,16 @@ import './SearchPage.css';
 import spinner from '../../assets/spinner.svg';
 import Pagination from '../Pagination/Pagintaion';
 import { Outlet, useNavigate, useLocation } from 'react-router';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const initialPage = Number.parseInt(searchParams.get('page') || '1', 10);
+  const { setItem, getItem } = useLocalStorage('searchValue');
 
-  const [searchValue, setSearchValue] = useState(() => getSearchValue());
+  const [searchValue, setSearchValue] = useState(() => getItem());
   const [results, setResults] = useState<Card[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,22 +64,18 @@ const SearchPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const LsSearchValue = getSearchValue();
+    const LsSearchValue = getItem();
     setSearchValue(LsSearchValue);
     fetchData(LsSearchValue, currentPage);
-  }, [fetchData, currentPage]);
+  }, [fetchData, currentPage, getItem]);
 
   useEffect(() => {
     navigate(`?page=${currentPage}`, { replace: true });
   }, [currentPage, navigate]);
 
-  function getSearchValue(): string {
-    return localStorage.getItem('searchValue') || '';
-  }
-
   const handleSearchButtonClick = () => {
     setCurrentPage(1);
-    localStorage.setItem('searchValue', searchValue);
+    setItem(searchValue);
     fetchData(searchValue, 1);
     navigate('?page=1', { replace: true });
   };
