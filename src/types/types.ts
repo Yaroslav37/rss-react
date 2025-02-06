@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface Card {
+  id: number;
   name: string;
   gender: string;
   height: string;

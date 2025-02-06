@@ -1,19 +1,26 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import CardList from '../Main/CardList';
-import { Card } from '../../types/types';
+import type { Card } from '../../types/types';
 import ErrorButton from '../common/ErrorButton';
 import './SearchPage.css';
 import spinner from '../../assets/spinner.svg';
 import Pagination from '../Pagination/Pagintaion';
+import { Outlet, useNavigate, useLocation } from 'react-router';
 
 const SearchPage: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const initialPage = Number.parseInt(searchParams.get('page') || '1', 10);
+
   const [searchValue, setSearchValue] = useState(() => getSearchValue());
   const [results, setResults] = useState<Card[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [shouldThrow, setShouldThrow] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [itemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
 
@@ -37,7 +44,11 @@ const SearchPage: React.FC = () => {
       }
 
       const data = await response.json();
-      setResults(data.results);
+      const resultsWithId = data.results.map((item: Card, index: number) => ({
+        ...item,
+        id: index + 1,
+      }));
+      setResults(resultsWithId);
       setTotalItems(data.count);
       setErrorMessage(null);
     } catch (error) {
@@ -53,8 +64,12 @@ const SearchPage: React.FC = () => {
   useEffect(() => {
     const LsSearchValue = getSearchValue();
     setSearchValue(LsSearchValue);
-    fetchData(LsSearchValue, 1);
-  }, [fetchData]);
+    fetchData(LsSearchValue, currentPage);
+  }, [fetchData, currentPage]);
+
+  useEffect(() => {
+    navigate(`?page=${currentPage}`, { replace: true });
+  }, [currentPage, navigate]);
 
   function getSearchValue(): string {
     return localStorage.getItem('searchValue') || '';
@@ -64,6 +79,7 @@ const SearchPage: React.FC = () => {
     setCurrentPage(1);
     localStorage.setItem('searchValue', searchValue);
     fetchData(searchValue, 1);
+    navigate('?page=1', { replace: true });
   };
 
   const handlePageChange = (page: number) => {
@@ -84,7 +100,7 @@ const SearchPage: React.FC = () => {
       />
       <div className="results">
         {isLoading ? (
-          <img src={spinner} alt="Loading..." />
+          <img src={spinner || '/placeholder.svg'} alt="Loading..." />
         ) : errorMessage ? (
           <div>{errorMessage}</div>
         ) : (
@@ -98,6 +114,7 @@ const SearchPage: React.FC = () => {
         handlePageChange={handlePageChange}
       />
       <ErrorButton onClick={() => setShouldThrow(true)} />
+      <Outlet />
     </div>
   );
 };

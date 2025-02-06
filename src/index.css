@@ -57,14 +57,13 @@ button {
   border: 1px solid #ccc;
 }
 
-.pagination button.active{
+.pagination button.active {
   background-color: #747bff;
   color: #fff;
   border-color: #747bff;
   cursor: default;
 }
 
-.pagination button.inactive{
+.pagination button.inactive {
   visibility: hidden;
 }
-
