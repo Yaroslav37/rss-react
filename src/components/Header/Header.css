@@ -1,7 +1,8 @@
 .header {
   display: flex;
   justify-content: space-between;
-  width: 600px;
+  width: 450px;
+  gap: 20px;
   align-items: center;
 }
 
@@ -13,5 +14,5 @@
 }
 
 .search-button {
-  height: 2rem;
+  height: 32px;
 }

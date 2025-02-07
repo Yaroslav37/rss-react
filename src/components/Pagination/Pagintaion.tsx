@@ -41,7 +41,9 @@ const Pagintaion: React.FC<PagintaionProps> = ({
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === pages.length}
-        className={currentPage === pages.length ? 'inactive' : ''}
+        className={
+          currentPage === pages.length || pages.length === 0 ? 'inactive' : ''
+        }
       >
         {'>'}
       </button>

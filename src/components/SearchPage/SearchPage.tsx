@@ -67,7 +67,7 @@ const SearchPage: React.FC = () => {
     const LsSearchValue = getItem();
     setSearchValue(LsSearchValue);
     fetchData(LsSearchValue, currentPage);
-  }, [fetchData, currentPage, getItem]);
+  }, [fetchData, currentPage]);
 
   useEffect(() => {
     navigate(`?page=${currentPage}`, { replace: true });
@@ -91,11 +91,20 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="container">
-      <Header
-        searchValue={searchValue}
-        onSearchChange={(e) => setSearchValue(e.target.value)}
-        onSearchSubmit={handleSearchButtonClick}
-      />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Header
+          searchValue={searchValue}
+          onSearchChange={(e) => setSearchValue(e.target.value)}
+          onSearchSubmit={handleSearchButtonClick}
+        />
+        <ErrorButton onClick={() => setShouldThrow(true)} />
+      </div>
       <div className="results">
         {isLoading ? (
           <img src={spinner || '/placeholder.svg'} alt="Loading..." />
@@ -104,15 +113,16 @@ const SearchPage: React.FC = () => {
         ) : (
           <CardList results={results} />
         )}
+        <Outlet />
       </div>
-      <Pagination
-        totalItems={totalItems}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        handlePageChange={handlePageChange}
-      />
-      <ErrorButton onClick={() => setShouldThrow(true)} />
-      <Outlet />
+      {!isLoading && (
+        <Pagination
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };
