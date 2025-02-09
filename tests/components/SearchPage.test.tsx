@@ -72,9 +72,7 @@ describe('SearchPage', () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/ошибка при получении данных/i)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/error fetching data/i)).toBeInTheDocument();
     });
   });
 });

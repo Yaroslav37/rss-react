@@ -1,12 +1,10 @@
-import type React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { Outlet, useNavigate, useLocation, useParams } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { Outlet, useNavigate, useLocation, useParams } from 'react-router-dom';
 import Header from '../Header/Header';
 import CardList from '../Main/CardList';
 import ErrorButton from '../common/ErrorButton';
 import Pagination from '../Pagination/Pagintaion';
-import { useSearchQuery } from '../../hooks/useSearchQuery';
-import type { Card } from '../../types/types';
+import { useFetchData } from '../../hooks/useFetchData';
 import spinner from '../../assets/spinner.svg';
 
 const SearchPage: React.FC = () => {
@@ -16,48 +14,11 @@ const SearchPage: React.FC = () => {
   const initialPage = Number.parseInt(searchParams.get('page') || '1', 10);
   const { id: detailsId } = useParams<{ id: string }>();
 
-  const [searchValue, setSearchValue] = useSearchQuery();
-  const [results, setResults] = useState<Card[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [shouldThrow, setShouldThrow] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [itemsPerPage] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
-
-  const fetchData = useCallback(async (searchQuery: string, page: number) => {
-    setIsLoading(true);
-    try {
-      const trimmedSearchValue = searchQuery.trim();
-      const baseUrl = 'https://swapi.dev/api/people/';
-      const params = new URLSearchParams();
-
-      if (page > 1) params.append('page', page.toString());
-      if (trimmedSearchValue) params.append('search', trimmedSearchValue);
-
-      const url = params.toString() ? `${baseUrl}?${params}` : baseUrl;
-      console.log(url);
-
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log(data);
-      setResults(data.results);
-      setTotalItems(data.count);
-      setErrorMessage(null);
-    } catch (error) {
-      setResults([]);
-      setErrorMessage(
-        `Ошибка при получении данных: ${(error as Error).message}`
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const [shouldThrow, setShouldThrow] = useState(false);
+  const { results, errorMessage, isLoading, totalItems, fetchData } =
+    useFetchData();
 
   useEffect(() => {
     fetchData(searchValue, currentPage);
@@ -106,7 +67,7 @@ const SearchPage: React.FC = () => {
               justifyContent: 'center',
             }}
           >
-            <img src={spinner || '/placeholder.svg'} alt="Loading..." />
+            <img src={spinner} alt="Loading..." />
           </div>
         ) : errorMessage ? (
           <div>{errorMessage}</div>
@@ -118,7 +79,7 @@ const SearchPage: React.FC = () => {
       {!isLoading && (
         <Pagination
           totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
+          itemsPerPage={10}
           currentPage={currentPage}
           handlePageChange={handlePageChange}
         />
