@@ -1,6 +1,5 @@
 import SearchInput from './SearchInput';
 import SearchButton from './SearchButton';
-import './Header.css';
 import { HeaderProps } from '../../types/types';
 
 const Header: React.FC<HeaderProps> = ({

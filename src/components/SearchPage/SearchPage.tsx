@@ -1,23 +1,22 @@
 import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import { Outlet, useNavigate, useLocation, useParams } from 'react-router';
 import Header from '../Header/Header';
 import CardList from '../Main/CardList';
-import type { Card } from '../../types/types';
 import ErrorButton from '../common/ErrorButton';
-import './SearchPage.css';
-import spinner from '../../assets/spinner.svg';
 import Pagination from '../Pagination/Pagintaion';
-import { Outlet, useNavigate, useLocation } from 'react-router';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useSearchQuery } from '../../hooks/useSearchQuery';
+import type { Card } from '../../types/types';
+import spinner from '../../assets/spinner.svg';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const initialPage = Number.parseInt(searchParams.get('page') || '1', 10);
-  const { setItem, getItem } = useLocalStorage('searchValue');
+  const { id: detailsId } = useParams<{ id: string }>();
 
-  const [searchValue, setSearchValue] = useState(() => getItem());
+  const [searchValue, setSearchValue] = useSearchQuery();
   const [results, setResults] = useState<Card[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,11 +45,8 @@ const SearchPage: React.FC = () => {
       }
 
       const data = await response.json();
-      const resultsWithId = data.results.map((item: Card, index: number) => ({
-        ...item,
-        id: index + 1,
-      }));
-      setResults(resultsWithId);
+      console.log(data);
+      setResults(data.results);
       setTotalItems(data.count);
       setErrorMessage(null);
     } catch (error) {
@@ -64,9 +60,7 @@ const SearchPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const LsSearchValue = getItem();
-    setSearchValue(LsSearchValue);
-    fetchData(LsSearchValue, currentPage);
+    fetchData(searchValue, currentPage);
   }, [fetchData, currentPage]);
 
   useEffect(() => {
@@ -75,14 +69,12 @@ const SearchPage: React.FC = () => {
 
   const handleSearchButtonClick = () => {
     setCurrentPage(1);
-    setItem(searchValue);
     fetchData(searchValue, 1);
     navigate('?page=1', { replace: true });
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    fetchData(searchValue, page);
   };
 
   if (shouldThrow) {
@@ -95,7 +87,7 @@ const SearchPage: React.FC = () => {
         style={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          gap: '20px',
         }}
       >
         <Header
@@ -107,13 +99,21 @@ const SearchPage: React.FC = () => {
       </div>
       <div className="results">
         {isLoading ? (
-          <img src={spinner || '/placeholder.svg'} alt="Loading..." />
+          <div
+            style={{
+              width: '700px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <img src={spinner || '/placeholder.svg'} alt="Loading..." />
+          </div>
         ) : errorMessage ? (
           <div>{errorMessage}</div>
         ) : (
           <CardList results={results} />
         )}
-        <Outlet />
+        {detailsId && <Outlet />}
       </div>
       {!isLoading && (
         <Pagination

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate, useLocation } from 'react-router';
 import spinner from '../../assets/spinner.svg';
 
 interface ProfileDetails {
@@ -15,6 +15,8 @@ interface ProfileDetails {
 
 export default function ProfileDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [profile, setProfile] = useState<ProfileDetails | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,6 +42,7 @@ export default function ProfileDetail() {
           birthYear: data.birth_year,
           gender: data.gender,
         };
+        console.log(data);
         setProfile(profileData);
       } catch (e) {
         setError((e as Error).message);
@@ -49,23 +52,33 @@ export default function ProfileDetail() {
       }
     };
 
-    fetchData();
+    if (id) {
+      fetchData();
+    }
   }, [id]);
+
+  const handleClose = () => {
+    const searchParams = new URLSearchParams(location.search);
+    navigate(`/rss-react?${searchParams.toString()}`);
+  };
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
+  if (isLoading) {
+    return (
+      <div className="details">
+        <img style={{ width: '50px' }} src={spinner} alt="Loading" />
+      </div>
+    );
+  }
   if (!profile) {
     return <div>Loading...</div>;
   }
 
-  if (isLoading) {
-    return <img style={{ width: '50px' }} src={spinner} alt="Loading..." />;
-  }
-
   return (
-    <div>
+    <div className="details">
       <div>Name: {profile.name}</div>
       <div>Height: {profile.height}</div>
       <div>Mass: {profile.mass}</div>
@@ -74,6 +87,9 @@ export default function ProfileDetail() {
       <div>Eye Color: {profile.eyeColor}</div>
       <div>Birth Year: {profile.birthYear}</div>
       <div>Gender: {profile.gender}</div>
+      <button style={{ backgroundColor: 'orange' }} onClick={handleClose}>
+        Close
+      </button>
     </div>
   );
 }

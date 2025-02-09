@@ -1,4 +1,3 @@
-import './ErrorButton.css';
 import { ErrorButtonProps } from '../../types/types';
 
 const ErrorButton: React.FC<ErrorButtonProps> = ({

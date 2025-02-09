@@ -1,4 +1,3 @@
-import './Header.css';
 import { SearchInputProps } from '../../types/types';
 
 const SearchInput: React.FC<SearchInputProps> = ({
