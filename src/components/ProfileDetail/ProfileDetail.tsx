@@ -1,17 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router';
 import spinner from '../../assets/spinner.svg';
-
-interface ProfileDetails {
-  name: string;
-  height: string;
-  mass: string;
-  hairColor: string;
-  skinColor: string;
-  eyeColor: string;
-  birthYear: string;
-  gender: string;
-}
+import { ProfileDetails } from '../../types/types';
 
 export default function ProfileDetail() {
   const { id } = useParams<{ id: string }>();

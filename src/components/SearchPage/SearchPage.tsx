@@ -44,13 +44,7 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="container">
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '20px',
-        }}
-      >
+      <div className="header-container">
         <Header
           searchValue={searchValue}
           onSearchChange={(e) => setSearchValue(e.target.value)}
@@ -60,13 +54,7 @@ const SearchPage: React.FC = () => {
       </div>
       <div className="results">
         {isLoading ? (
-          <div
-            style={{
-              width: '700px',
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
+          <div className="loading-container">
             <img src={spinner} alt="Loading..." />
           </div>
         ) : errorMessage ? (

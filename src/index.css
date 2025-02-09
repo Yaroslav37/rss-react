@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: black;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -134,11 +134,14 @@ button {
 .details {
   width: 300px;
   height: 600px;
+  gap: 10px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   border: 1px solid white;
+  margin-left: 10px;
 }
 
 .container {
@@ -153,5 +156,18 @@ button {
   display: flex;
   width: 1000px;
   height: 700px;
-  border: 1px white solid;
+  /* border: 1px white solid; */
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+}
+
+.loading-container {
+  width: 700px;
+  display: flex;
+  justify-content: center;
 }
