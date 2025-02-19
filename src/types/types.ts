@@ -5,7 +5,7 @@ export interface Card {
   gender: string;
   height: string;
   mass: string;
-  url: string;
+  id: number;
 }
 
 export interface SearchPageState {

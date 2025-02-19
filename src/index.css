@@ -3,9 +3,10 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  /* color-scheme: light dark; */
   color: rgba(255, 255, 255, 0.87);
-  background-color: black;
+  background-color: var(--bg-color);
+  color: var(--color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,10 +14,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
+[data-theme="light"]{
+  --bg-color: white;
+  -color: black;
+}
+
+[data-theme="dark"]{
+  --bg-color: black;
+  --color: white;
+}
+
+body{
+  background-color: var(--bg-color);
+  color: var(--text-color);
   margin: 0;
   display: flex;
-  place-items: center;
+  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
 }
@@ -32,7 +45,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -125,6 +138,7 @@ button {
   display: flex;
   align-items: column;
   justify-content: space-between;
+  gap: 20px
 }
 
 .card-block:hover {
@@ -140,7 +154,8 @@ button {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border: 1px solid white;
+  border: 1px solid;
+  border-color: var(--color);
   margin-left: 10px;
 }
 
@@ -156,7 +171,6 @@ button {
   display: flex;
   width: 1000px;
   height: 700px;
-  /* border: 1px white solid; */
 }
 
 .header-container {

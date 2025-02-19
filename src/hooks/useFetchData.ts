@@ -1,6 +1,14 @@
 import { useState, useCallback } from 'react';
 import type { Card } from '../../src/types/types';
 
+interface Hero {
+  name: string;
+  gender: string;
+  height: string;
+  mass: string;
+  url: string;
+}
+
 export const useFetchData = () => {
   const [results, setResults] = useState<Card[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -27,8 +35,17 @@ export const useFetchData = () => {
       }
 
       const data = await response.json();
-      console.log(data);
-      setResults(data.results);
+      // console.log(data);
+      const peopleList: Card[] = data.results.map((hero: Hero) => {
+        return {
+          name: hero.name,
+          gender: hero.gender,
+          height: hero.height,
+          mass: hero.mass,
+          id: hero.url.split('/').slice(-2, -1)[0],
+        };
+      });
+      setResults(peopleList);
       setTotalItems(data.count);
       setErrorMessage(null);
     } catch (error) {

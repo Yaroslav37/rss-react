@@ -6,6 +6,9 @@ import ErrorButton from '../common/ErrorButton';
 import Pagination from '../Pagination/Pagintaion';
 import { useFetchData } from '../../hooks/useFetchData';
 import spinner from '../../assets/spinner.svg';
+import ThemeSwitcher from '../common/ThemeSwitcher';
+import { useTheme } from '../contexts/ThemeContext';
+import Flyout from '../common/Flyout';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,6 +16,7 @@ const SearchPage: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const initialPage = Number.parseInt(searchParams.get('page') || '1', 10);
   const { id: detailsId } = useParams<{ id: string }>();
+  const { theme } = useTheme();
 
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -43,7 +47,8 @@ const SearchPage: React.FC = () => {
   }
 
   return (
-    <div className="container">
+    <div className={`container ${theme}`}>
+      <ThemeSwitcher />
       <div className="header-container">
         <Header
           searchValue={searchValue}
@@ -72,6 +77,8 @@ const SearchPage: React.FC = () => {
           handlePageChange={handlePageChange}
         />
       )}
+
+      <Flyout />
     </div>
   );
 };
