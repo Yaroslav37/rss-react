@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useLocation } from 'react-router';
-import spinner from '../../assets/spinner.svg';
 import { useGetHeroByIdQuery } from '../../services/starwars';
+import Spinner from '../common/Spinner';
 
 export default function ProfileDetail() {
   const { id } = useParams<{ id: string }>();
@@ -21,7 +21,7 @@ export default function ProfileDetail() {
   if (isFetching) {
     return (
       <div className="details">
-        <img style={{ width: '50px' }} src={spinner} alt="Loading" />
+        <Spinner />
       </div>
     );
   }

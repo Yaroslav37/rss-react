@@ -5,10 +5,10 @@ import CardList from '../Main/CardList';
 import ErrorButton from '../common/ErrorButton';
 import Pagination from '../Pagination/Pagintaion';
 import { useFetchData } from '../../hooks/useFetchData';
-import spinner from '../../assets/spinner.svg';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import { useTheme } from '../contexts/ThemeContext';
 import Flyout from '../common/Flyout';
+import Spinner from '../common/Spinner';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ const SearchPage: React.FC = () => {
       <div className="results">
         {isLoading ? (
           <div className="loading-container">
-            <img src={spinner} alt="Loading..." />
+            <Spinner />
           </div>
         ) : errorMessage ? (
           <div>{errorMessage}</div>
