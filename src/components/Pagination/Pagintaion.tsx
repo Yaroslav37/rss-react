@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 interface PagintaionProps {
   totalItems: number;
@@ -23,7 +24,9 @@ const Pagintaion: React.FC<PagintaionProps> = ({
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={currentPage === 1 ? 'inactive' : ''}
+        className={classNames('pagination-button', {
+          inactive: currentPage === 1,
+        })}
       >
         {'<'}
       </button>
@@ -32,7 +35,9 @@ const Pagintaion: React.FC<PagintaionProps> = ({
           <button
             key={index}
             onClick={() => handlePageChange(page)}
-            className={currentPage === page ? 'active' : ''}
+            className={classNames('pagination-button', {
+              active: currentPage === page,
+            })}
           >
             {page}
           </button>
@@ -41,9 +46,9 @@ const Pagintaion: React.FC<PagintaionProps> = ({
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === pages.length}
-        className={
-          currentPage === pages.length || pages.length === 0 ? 'inactive' : ''
-        }
+        className={classNames('pagination-button', {
+          inactive: currentPage === pages.length || pages.length === 0,
+        })}
       >
         {'>'}
       </button>

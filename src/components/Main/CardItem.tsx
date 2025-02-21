@@ -3,6 +3,7 @@ import { Card } from '../../types/types';
 import { useLocation, useNavigate } from 'react-router';
 import { RootState } from '../../App';
 import { toggleItem } from '../../store/selectedItemSlice';
+import Checkbox from '../common/Checkbox';
 
 const CardItem: React.FC<Card> = ({ id, name, gender, height, mass }: Card) => {
   const location = useLocation();
@@ -25,21 +26,26 @@ const CardItem: React.FC<Card> = ({ id, name, gender, height, mass }: Card) => {
     dispatch(toggleItem({ id, name, gender, height, mass }));
   };
 
+  const isChecked = (selectedItems: Card[], id: number): boolean => {
+    return selectedItems.some((selectedItem: Card) => selectedItem.id === id);
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <input
-        type="checkbox"
-        checked={selectedItems.some(
-          (selectedItem: Card) => selectedItem.id === id
-        )}
-        onChange={handleToggle}
+    <div
+      style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+    >
+      <Checkbox
+        checked={isChecked(selectedItems, id)}
+        handleToggle={handleToggle}
       />
       <div className="card-block" onClick={handleClick}>
+        <div className="card-decal"></div>
         <div className="card-name">{name}</div>
         <div className="card-item">Gender: {gender}</div>
         <div className="card-item">Height: {height} cm</div>
         <div className="card-item">Mass: {mass} kg</div>
       </div>
+      {/* </div> */}
     </div>
   );
 };

@@ -39,7 +39,7 @@ export default function ProfileDetail() {
       <div>Eye Color: {profile.eyeColor}</div>
       <div>Birth Year: {profile.birthYear}</div>
       <div>Gender: {profile.gender}</div>
-      <button style={{ backgroundColor: 'orange' }} onClick={handleClose}>
+      <button className="close-button" onClick={handleClose}>
         Close
       </button>
     </div>

@@ -12,12 +12,13 @@
     "prepare": "husky",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "test": "vitest run --coverage",
+    "test": "vitest run --coverage --passWithNoTests",
     "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
     "@testing-library/user-event": "^14.6.1",
+    "classnames": "^2.5.1",
     "jsdom": "^26.0.0",
     "msw": "^2.7.0",
     "react-dom": "^18.3.1",
