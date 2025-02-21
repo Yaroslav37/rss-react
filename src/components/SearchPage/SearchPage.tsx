@@ -4,11 +4,11 @@ import Header from '../Header/Header';
 import CardList from '../Main/CardList';
 import ErrorButton from '../common/ErrorButton';
 import Pagination from '../Pagination/Pagintaion';
-import { useFetchData } from '../../hooks/useFetchData';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import { useTheme } from '../contexts/ThemeContext';
 import Flyout from '../common/Flyout';
 import Spinner from '../common/Spinner';
+import { useGetHeroesQuery } from '../../services/starwars';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,22 +19,22 @@ const SearchPage: React.FC = () => {
   const { theme } = useTheme();
 
   const [searchValue, setSearchValue] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [shouldThrow, setShouldThrow] = useState(false);
-  const { results, errorMessage, isLoading, totalItems, fetchData } =
-    useFetchData();
 
-  useEffect(() => {
-    fetchData(searchValue, currentPage);
-  }, [fetchData, currentPage]);
+  const { data, error, isFetching } = useGetHeroesQuery({
+    searchQuery: searchQuery,
+    page: currentPage,
+  });
 
   useEffect(() => {
     navigate(`?page=${currentPage}`, { replace: true });
-  }, [currentPage, navigate]);
+  }, [currentPage]);
 
   const handleSearchButtonClick = () => {
     setCurrentPage(1);
-    fetchData(searchValue, 1);
+    setSearchQuery(searchValue);
     navigate('?page=1', { replace: true });
   };
 
@@ -58,20 +58,20 @@ const SearchPage: React.FC = () => {
         <ErrorButton onClick={() => setShouldThrow(true)} />
       </div>
       <div className="results">
-        {isLoading ? (
+        {isFetching ? (
           <div className="loading-container">
             <Spinner />
           </div>
-        ) : errorMessage ? (
-          <div>{errorMessage}</div>
+        ) : error ? (
+          <div>{error.toString()}</div>
         ) : (
-          <CardList results={results} />
+          <CardList results={data?.results || []} />
         )}
         {detailsId && <Outlet />}
       </div>
-      {!isLoading && (
+      {!isFetching && (
         <Pagination
-          totalItems={totalItems}
+          totalItems={data?.count || 0}
           itemsPerPage={10}
           currentPage={currentPage}
           handlePageChange={handlePageChange}

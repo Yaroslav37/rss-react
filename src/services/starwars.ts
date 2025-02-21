@@ -25,6 +25,24 @@ const convertToCamelCase = (data: ApiProfileDetails): ProfileDetails => {
   };
 };
 
+interface Hero {
+  name: string;
+  gender: string;
+  height: string;
+  mass: string;
+  url: string;
+}
+
+const convertHeroToCard = (hero: Hero): Card => {
+  return {
+    name: hero.name,
+    gender: hero.gender,
+    height: hero.height,
+    mass: hero.mass,
+    id: Number(hero.url.split('/').slice(-2, -1)[0]),
+  };
+};
+
 export const swApi = createApi({
   reducerPath: 'swApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://swapi.dev/api' }),
@@ -34,8 +52,22 @@ export const swApi = createApi({
       transformResponse: (response: ApiProfileDetails) =>
         convertToCamelCase(response),
     }),
-    getHeroes: builder.query<Card[], undefined>({
-      query: () => `people`,
+    getHeroes: builder.query<
+      { results: Card[]; count: number },
+      { searchQuery: string; page: number }
+    >({
+      query: ({ searchQuery, page }) => {
+        const trimmedSearchValue = searchQuery.trim();
+        const params = new URLSearchParams();
+
+        if (page > 1) params.append('page', page.toString());
+        if (trimmedSearchValue) params.append('search', trimmedSearchValue);
+        return `people?${params.toString()}`;
+      },
+      transformResponse: (response: { results: Hero[]; count: number }) => {
+        const peopleList: Card[] = response.results.map(convertHeroToCard);
+        return { results: peopleList, count: response.count };
+      },
     }),
   }),
 });
