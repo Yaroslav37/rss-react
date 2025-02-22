@@ -332,3 +332,10 @@ button {
   border: none;
 }
 
+.unselect-button:hover{
+  background-color: rgba(255, 181, 69, 0.8);
+}
+
+.download-button:hover{
+  background-color: rgba(50, 211, 101, 0.8);
+}

@@ -11,14 +11,14 @@ describe('CardList', () => {
       gender: 'male',
       height: '172',
       mass: '77',
-      url: 'https://swapi.dev/api/people/1/',
+      id: 1,
     },
     {
       name: 'Darth Vader',
       gender: 'male',
       height: '202',
       mass: '136',
-      url: 'https://swapi.dev/api/people/2/',
+      id: 2,
     },
   ];
 

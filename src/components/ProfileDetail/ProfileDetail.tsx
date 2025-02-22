@@ -25,8 +25,9 @@ export default function ProfileDetail() {
       </div>
     );
   }
+
   if (!profile) {
-    return <div>Loading...</div>;
+    return <div>Profile not found</div>;
   }
 
   return (

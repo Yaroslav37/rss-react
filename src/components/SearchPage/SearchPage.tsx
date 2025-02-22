@@ -9,6 +9,9 @@ import { useTheme } from '../contexts/ThemeContext';
 import Flyout from '../common/Flyout';
 import Spinner from '../common/Spinner';
 import { useGetHeroesQuery } from '../../services/starwars';
+import { useSearchQuery } from '../../hooks/useSearchQuery';
+import { unselectAll } from '../../store/selectedItemSlice';
+import { useDispatch } from 'react-redux';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,10 +21,11 @@ const SearchPage: React.FC = () => {
   const { id: detailsId } = useParams<{ id: string }>();
   const { theme } = useTheme();
 
-  const [searchValue, setSearchValue] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useSearchQuery();
+  const [searchValue, setSearchValue] = useState(searchQuery);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [shouldThrow, setShouldThrow] = useState(false);
+  const dispatch = useDispatch();
 
   const { data, error, isFetching } = useGetHeroesQuery({
     searchQuery: searchQuery,
@@ -36,6 +40,7 @@ const SearchPage: React.FC = () => {
     setCurrentPage(1);
     setSearchQuery(searchValue);
     navigate('?page=1', { replace: true });
+    dispatch(unselectAll());
   };
 
   const handlePageChange = (page: number) => {
@@ -77,7 +82,6 @@ const SearchPage: React.FC = () => {
           handlePageChange={handlePageChange}
         />
       )}
-
       <Flyout />
     </div>
   );

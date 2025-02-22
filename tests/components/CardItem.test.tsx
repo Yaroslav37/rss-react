@@ -16,7 +16,7 @@ vi.mock('react-router-dom', async () => {
 
 describe('CardItem', () => {
   const mockCard: Card = {
-    url: 'https://swapi.dev/api/people/1/',
+    id: 1,
     name: 'Luke Skywalker',
     gender: 'male',
     height: '172',

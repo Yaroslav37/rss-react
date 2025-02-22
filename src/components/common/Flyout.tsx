@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../App';
 import { unselectAll } from '../../store/selectedItemSlice';
-import { useRef } from 'react';
+import FileSaver from 'file-saver';
 
 export default function Flyout() {
   const dispatch = useDispatch();
   const selectedItems = useSelector(
     (state: RootState) => state.selectedItems.items
   );
-
-  const linkRef = useRef<HTMLAnchorElement>(null);
 
   const handleUnselectAll = () => {
     dispatch(unselectAll());
@@ -24,15 +22,7 @@ export default function Flyout() {
   const handleDownload = () => {
     const csvContent = convertToCSV();
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    if (linkRef.current) {
-      linkRef.current.href = url;
-      linkRef.current.setAttribute(
-        'download',
-        `${selectedItems.length}_heroes.csv`
-      );
-      linkRef.current.click();
-    }
+    FileSaver.saveAs(blob, `${selectedItems.length}_heroes.csv`);
   };
 
   if (selectedItems.length === 0) return null;
@@ -44,14 +34,16 @@ export default function Flyout() {
         flexDirection: 'column',
         width: '600px',
         justifyContent: 'space-between',
+        gap: '10px',
       }}
     >
       <span>Selected Items: {selectedItems.length}</span>
-      <button onClick={handleUnselectAll}>UnselectAll</button>
-      <button onClick={handleDownload}>Download selected</button>
-      <a ref={linkRef} style={{ display: 'none' }}>
-        Download
-      </a>
+      <button className="unselect-button" onClick={handleUnselectAll}>
+        UnselectAll
+      </button>
+      <button className="download-button" onClick={handleDownload}>
+        Download selected
+      </button>
     </div>
   );
 }
