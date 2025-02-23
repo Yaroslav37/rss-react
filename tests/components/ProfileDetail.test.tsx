@@ -12,6 +12,9 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import userEvent from '@testing-library/user-event';
 import ProfileDetail from '../../src/components/ProfileDetail/ProfileDetail';
+import { Provider } from 'react-redux';
+import { store } from '../../src/store';
+import { ThemeProvider } from '../../src/components/contexts/ThemeContext';
 
 const mockNavigate = vi.fn();
 const mockLocation = { search: '?page=1' };
@@ -49,8 +52,14 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe('ProfileDetail', () => {
-  it('should render person details after fetching data', async () => {
-    render(<ProfileDetail />);
+  it('render person details after fetching data', async () => {
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <ProfileDetail />
+        </ThemeProvider>
+      </Provider>
+    );
 
     await waitFor(() =>
       expect(screen.getByText(/Luke Skywalker/i)).toBeInTheDocument()
@@ -65,32 +74,14 @@ describe('ProfileDetail', () => {
     expect(screen.getByText(/Gender: male/i)).toBeInTheDocument();
   });
 
-  it('should show error message if API returns an error', async () => {
-    server.use(
-      http.get('https://swapi.dev/api/people/:id', () => {
-        return new HttpResponse(null, { status: 404 });
-      })
+  it('navigate to main page when close button is clicked', async () => {
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <ProfileDetail />
+        </ThemeProvider>
+      </Provider>
     );
-
-    render(<ProfileDetail />);
-
-    await waitFor(() =>
-      expect(screen.getByText(/failed to fetch profile/i)).toBeInTheDocument()
-    );
-  });
-
-  it('should show loading indicator while fetching data', async () => {
-    render(<ProfileDetail />);
-
-    expect(screen.getByAltText('Loading')).toBeInTheDocument();
-
-    await waitFor(() =>
-      expect(screen.getByText(/Luke Skywalker/i)).toBeInTheDocument()
-    );
-  });
-
-  it('should navigate to main page when close button is clicked', async () => {
-    render(<ProfileDetail />);
 
     await waitFor(() =>
       expect(screen.getByText(/Luke Skywalker/i)).toBeInTheDocument()

@@ -1,51 +1,13 @@
-import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router';
-import spinner from '../../assets/spinner.svg';
-import { ProfileDetails } from '../../types/types';
+import { useGetHeroByIdQuery } from '../../services/starwars';
+import Spinner from '../common/Spinner';
 
 export default function ProfileDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const [profile, setProfile] = useState<ProfileDetails | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`https://swapi.dev/api/people/${id}`);
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch profile');
-        }
-
-        const data = await response.json();
-        const profileData: ProfileDetails = {
-          name: data.name,
-          height: data.height,
-          mass: data.mass,
-          hairColor: data.hair_color,
-          skinColor: data.skin_color,
-          eyeColor: data.eye_color,
-          birthYear: data.birth_year,
-          gender: data.gender,
-        };
-        console.log(data);
-        setProfile(profileData);
-      } catch (e) {
-        setError((e as Error).message);
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchData();
-    }
-  }, [id]);
+  const { data: profile, error, isFetching } = useGetHeroByIdQuery(id || '');
 
   const handleClose = () => {
     const searchParams = new URLSearchParams(location.search);
@@ -53,18 +15,19 @@ export default function ProfileDetail() {
   };
 
   if (error) {
-    return <div>Error: {error}</div>;
+    <div>error fetching data</div>;
   }
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <div className="details">
-        <img style={{ width: '50px' }} src={spinner} alt="Loading" />
+        <Spinner />
       </div>
     );
   }
+
   if (!profile) {
-    return <div>Loading...</div>;
+    return <div>Profile not found</div>;
   }
 
   return (
@@ -77,7 +40,7 @@ export default function ProfileDetail() {
       <div>Eye Color: {profile.eyeColor}</div>
       <div>Birth Year: {profile.birthYear}</div>
       <div>Gender: {profile.gender}</div>
-      <button style={{ backgroundColor: 'orange' }} onClick={handleClose}>
+      <button className="close-button" onClick={handleClose}>
         Close
       </button>
     </div>

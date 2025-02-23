@@ -4,19 +4,28 @@ import SearchPage from './components/SearchPage/SearchPage';
 import NotFoundPage from './components/NotFoundPage/NotFoundPage';
 import ProfileDetail from './components/ProfileDetail/ProfileDetail';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import { ThemeProvider } from './components/contexts/ThemeContext';
+import { Provider } from 'react-redux';
+import { store } from './store';
+
+export type RootState = ReturnType<typeof store.getState>;
 
 function App() {
   return (
-    <BrowserRouter>
-      <ErrorBoundary>
-        <Routes>
-          <Route path="/rss-react" element={<SearchPage />}>
-            <Route path="details/:id" element={<ProfileDetail />} />
-          </Route>
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </ErrorBoundary>
-    </BrowserRouter>
+    <Provider store={store}>
+      <ThemeProvider>
+        <BrowserRouter>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/rss-react" element={<SearchPage />}>
+                <Route path="details/:id" element={<ProfileDetail />} />
+              </Route>
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </ErrorBoundary>
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

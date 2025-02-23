@@ -7,7 +7,7 @@ const ProblematicComponent = () => {
 };
 
 describe('ErrorBoundary', () => {
-  it('should render children when no error', () => {
+  it(' render children when no error', () => {
     render(
       <ErrorBoundary>
         <div>Test Content</div>
@@ -16,7 +16,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('should render error message when there is an error', () => {
+  it(' render error message when there is an error', () => {
     render(
       <ErrorBoundary>
         <ProblematicComponent />
