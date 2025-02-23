@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-
+import clsx from 'clsx';
 type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
@@ -30,7 +30,14 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
+      <div
+        className={clsx('app', {
+          'theme-light': theme === 'light',
+          'theme-dark': theme === 'dark',
+        })}
+      >
+        {children}
+      </div>
     </ThemeContext.Provider>
   );
 };

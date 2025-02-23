@@ -25,7 +25,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('SearchPage', () => {
-  it('should render loading state initially', () => {
+  it('renders loading state initially', () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
@@ -39,7 +39,7 @@ describe('SearchPage', () => {
     expect(screen.getByTitle('Loading')).toBeInTheDocument();
   });
 
-  it('should render error message on fetch failure', async () => {
+  it('render error message on fetch failure', async () => {
     server.use(
       http.get('https://swapi.dev/api/people?', () => {
         return HttpResponse.error();
@@ -60,7 +60,7 @@ describe('SearchPage', () => {
     });
   });
 
-  it('should update search query and reset page on search button click', async () => {
+  it('update search query and reset page on search button click', async () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
@@ -80,7 +80,7 @@ describe('SearchPage', () => {
     });
   });
 
-  it('should display Flyout when an item is selected', async () => {
+  it('display Flyout when an item is selected', async () => {
     render(
       <BrowserRouter>
         <Provider store={store}>

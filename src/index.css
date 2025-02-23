@@ -19,6 +19,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+ .theme-light {
+  --bg-color: white;
+   --color: black;
+   --input-bg-color: #f0f0f0;
+   --input-text-color: #333;
+   --card-name-color: #628f9e;
+ }
+  
+.theme-dark {
+ --bg-color: black;
+ --color: white;
+ --input-bg-color: #1D1E20;
+ --input-text-color: #C5C5C5;
+   --card-name-color: #9dd9ee;
+ }
+
 [data-theme="light"]{
   --bg-color: white;
   --color: black;
@@ -33,7 +49,7 @@
   --input-bg-color: #1D1E20;
   --input-text-color: #C5C5C5;
   --card-name-color: #9dd9ee;
-}
+} 
 
 body{
   background-color: var(--bg-color);

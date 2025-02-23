@@ -30,7 +30,7 @@ describe('CardItem', () => {
     mockNavigate.mockReset();
   });
 
-  it('should render the card with correct data', () => {
+  it(' render the card with correct data', () => {
     render(
       <MemoryRouter initialEntries={['/rss-react']}>
         <Provider store={store}>

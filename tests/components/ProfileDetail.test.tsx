@@ -52,7 +52,7 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe('ProfileDetail', () => {
-  it('should render person details after fetching data', async () => {
+  it('render person details after fetching data', async () => {
     render(
       <Provider store={store}>
         <ThemeProvider>
@@ -74,7 +74,7 @@ describe('ProfileDetail', () => {
     expect(screen.getByText(/Gender: male/i)).toBeInTheDocument();
   });
 
-  it('should navigate to main page when close button is clicked', async () => {
+  it('navigate to main page when close button is clicked', async () => {
     render(
       <Provider store={store}>
         <ThemeProvider>

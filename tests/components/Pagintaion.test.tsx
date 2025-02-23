@@ -21,7 +21,7 @@ describe('Pagination', () => {
   };
   const handlePageChange = vi.fn();
 
-  it('should render pagination buttons correctly', () => {
+  it('render pagination buttons correctly', () => {
     render(
       <Pagination
         totalItems={50}
@@ -38,7 +38,7 @@ describe('Pagination', () => {
     expect(screen.getByText('5')).toBeInTheDocument();
   });
 
-  it('should disable previous button on first page', () => {
+  it('disable previous button on first page', () => {
     render(
       <Pagination
         totalItems={50}
@@ -51,7 +51,7 @@ describe('Pagination', () => {
     expect(screen.getByText('<')).toBeDisabled();
   });
 
-  it('should disable next button on last page', () => {
+  it('disable next button on last page', () => {
     render(
       <Pagination
         totalItems={50}
@@ -64,7 +64,7 @@ describe('Pagination', () => {
     expect(screen.getByText('>')).toBeDisabled();
   });
 
-  it('should call handlePageChange with correct page number when page button is clicked', () => {
+  it('call handlePageChange with correct page number when page button is clicked', () => {
     render(
       <Pagination
         totalItems={50}
@@ -78,7 +78,7 @@ describe('Pagination', () => {
     expect(handlePageChange).toHaveBeenCalledWith(3);
   });
 
-  it('should call handlePageChange with correct page number when next button is clicked', () => {
+  it('call handlePageChange with correct page number when next button is clicked', () => {
     render(
       <Pagination
         totalItems={50}
@@ -92,7 +92,7 @@ describe('Pagination', () => {
     expect(handlePageChange).toHaveBeenCalledWith(2);
   });
 
-  it('should call handlePageChange with correct page number when previous button is clicked', () => {
+  it(' call handlePageChange with correct page number when previous button is clicked', () => {
     render(
       <Pagination
         totalItems={50}
@@ -106,7 +106,7 @@ describe('Pagination', () => {
     expect(handlePageChange).toHaveBeenCalledWith(1);
   });
 
-  it('should update URL query parameter when page changes', () => {
+  it('update URL query parameter when page changes', () => {
     const TestComponent = () => {
       const navigate = useNavigate();
       const handlePageChange = (page: number) => {

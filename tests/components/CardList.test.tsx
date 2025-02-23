@@ -25,7 +25,7 @@ describe('CardList', () => {
     },
   ];
 
-  it('should render correctly with results', () => {
+  it(' render correctly with results', () => {
     const { getByText } = render(
       <BrowserRouter>
         <Provider store={store}>

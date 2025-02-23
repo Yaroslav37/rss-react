@@ -43,7 +43,7 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe('ProfileDetail', () => {
-  it('should show error message if API returns an error', async () => {
+  it('shows not found when profile doesnt exists', async () => {
     render(
       <BrowserRouter>
         <Provider store={store}>

@@ -14,7 +14,6 @@ import { page1data } from '../mockdata';
 
 const handlers = [
   http.get('https://swapi.dev/api/people?page=1', () => {
-    console.log('mock full');
     return HttpResponse.json(page1data);
   }),
 ];
@@ -31,7 +30,7 @@ const TestComponent = () => {
 };
 
 describe('SearchPage', () => {
-  it('should render search results after fetch', async () => {
+  it('renders search results after fetch', async () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
@@ -55,7 +54,7 @@ describe('SearchPage', () => {
     });
   });
 
-  it('should toggle theme when ThemeSwitcher button is clicked', () => {
+  it('toggles theme when ThemeSwitcher button is clicked', () => {
     render(
       <BrowserRouter>
         <Provider store={store}>

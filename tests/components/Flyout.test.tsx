@@ -25,7 +25,7 @@ const renderWithProviders = (
 };
 
 describe('Flyout', () => {
-  it('should render correctly when there are selected items', () => {
+  it(' render correctly when there are selected items', () => {
     const preloadedState = {
       selectedItems: {
         items: [
@@ -47,13 +47,13 @@ describe('Flyout', () => {
     expect(screen.getByText('Download selected')).toBeInTheDocument();
   });
 
-  it('should not render when there are no selected items', () => {
+  it(' not render when there are no selected items', () => {
     renderWithProviders(<Flyout />);
 
     expect(screen.queryByText('Selected Items:')).not.toBeInTheDocument();
   });
 
-  it('should dispatch unselectAll action when UnselectAll button is clicked', () => {
+  it(' dispatch unselectAll action when UnselectAll button is clicked', () => {
     const preloadedState = {
       selectedItems: {
         items: [
@@ -79,7 +79,7 @@ describe('Flyout', () => {
     expect(store.getState().selectedItems.items).toHaveLength(0);
   });
 
-  it('should call createDownloadUrl and revokeDownloadUrl when Download selected button is clicked', () => {
+  it(' call createDownloadUrl and revokeDownloadUrl when Download selected button is clicked', () => {
     const preloadedState = {
       selectedItems: {
         items: [

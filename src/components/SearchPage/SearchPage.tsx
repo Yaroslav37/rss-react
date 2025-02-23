@@ -24,7 +24,7 @@ const SearchPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useSearchQuery();
   const [searchValue, setSearchValue] = useState(searchQuery);
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [shouldThrow, setShouldThrow] = useState(false);
+  const [Throw, setThrow] = useState(false);
   const dispatch = useDispatch();
 
   const { data, error, isFetching } = useGetHeroesQuery({
@@ -47,7 +47,7 @@ const SearchPage: React.FC = () => {
     setCurrentPage(page);
   };
 
-  if (shouldThrow) {
+  if (Throw) {
     throw new Error('Test ErrorBoundary');
   }
 
@@ -60,7 +60,7 @@ const SearchPage: React.FC = () => {
           onSearchChange={(e) => setSearchValue(e.target.value)}
           onSearchSubmit={handleSearchButtonClick}
         />
-        <ErrorButton onClick={() => setShouldThrow(true)} />
+        <ErrorButton onClick={() => setThrow(true)} />
       </div>
       <div className="results">
         {isFetching ? (
