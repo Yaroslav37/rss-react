@@ -68,7 +68,7 @@ const SearchPage: React.FC = () => {
             <Spinner />
           </div>
         ) : error ? (
-          <div>{error.toString()}</div>
+          <div>error fetching data</div>
         ) : (
           <CardList results={data?.results || []} />
         )}

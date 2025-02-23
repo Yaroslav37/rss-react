@@ -23,9 +23,9 @@ const Pagintaion: React.FC<PagintaionProps> = ({
     <div className="pagination">
       <button
         onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        disabled={currentPage === 1 || currentPage > pages.length}
         className={classNames('pagination-button', {
-          inactive: currentPage === 1,
+          inactive: currentPage === 1 || currentPage > pages.length,
         })}
       >
         {'<'}

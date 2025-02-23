@@ -3,6 +3,9 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import CardItem from '../../src/components/Main/CardItem';
 import { Card } from '../../src/types/types';
+import { Provider } from 'react-redux';
+import { store } from '../../src/store';
+import { ThemeProvider } from '../../src/components/contexts/ThemeContext';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -30,9 +33,13 @@ describe('CardItem', () => {
   it('should render the card with correct data', () => {
     render(
       <MemoryRouter initialEntries={['/rss-react']}>
-        <Routes>
-          <Route path="/rss-react" element={<CardItem {...mockCard} />} />
-        </Routes>
+        <Provider store={store}>
+          <ThemeProvider>
+            <Routes>
+              <Route path="/rss-react" element={<CardItem {...mockCard} />} />
+            </Routes>
+          </ThemeProvider>
+        </Provider>
       </MemoryRouter>
     );
 

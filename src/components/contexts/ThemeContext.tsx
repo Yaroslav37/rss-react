@@ -25,10 +25,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    document.documentElement.setAttribute(
-      'data-theme',
-      theme === 'light' ? 'light' : 'dark'
-    );
+    document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
   return (

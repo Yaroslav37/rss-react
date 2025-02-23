@@ -11,7 +11,10 @@ const Spinner: React.FC = () => {
       height="64"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Loading"
     >
+      <title>Loading</title>
       <style>
         {`
           .spinner_GmWz { animation: spinner_Ctle .8s linear infinite; animation-delay: -.8s; }

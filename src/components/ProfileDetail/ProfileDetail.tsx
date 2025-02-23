@@ -15,7 +15,7 @@ export default function ProfileDetail() {
   };
 
   if (error) {
-    return <div>Error: {error.toString()}</div>;
+    <div>error fetching data</div>;
   }
 
   if (isFetching) {

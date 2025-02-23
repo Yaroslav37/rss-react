@@ -35,7 +35,6 @@ export const useFetchData = () => {
       }
 
       const data = await response.json();
-      // console.log(data);
       const peopleList: Card[] = data.results.map((hero: Hero) => {
         return {
           name: hero.name,

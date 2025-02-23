@@ -1,28 +1,33 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../App';
 import { unselectAll } from '../../store/selectedItemSlice';
-import FileSaver from 'file-saver';
+
+import { useRef, useState } from 'react';
+import { createDownloadUrl, revokeDownloadUrl } from '../../utils/FileSaver';
 
 export default function Flyout() {
   const dispatch = useDispatch();
   const selectedItems = useSelector(
     (state: RootState) => state.selectedItems.items
   );
+  const downloadRef = useRef<HTMLAnchorElement>(null);
+  const [downloadUrl, setDownloadUrl] = useState('');
 
   const handleUnselectAll = () => {
     dispatch(unselectAll());
   };
 
-  const convertToCSV = () => {
-    const header = Object.keys(selectedItems[0]).join(',');
-    const rows = selectedItems.map((row) => Object.values(row).join(','));
-    return [header, ...rows].join('\n');
-  };
-
   const handleDownload = () => {
-    const csvContent = convertToCSV();
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    FileSaver.saveAs(blob, `${selectedItems.length}_heroes.csv`);
+    const url = createDownloadUrl(selectedItems);
+    setDownloadUrl(url);
+
+    setTimeout(() => {
+      if (downloadRef.current) {
+        downloadRef.current.click();
+        revokeDownloadUrl(url);
+        setDownloadUrl('');
+      }
+    }, 0);
   };
 
   if (selectedItems.length === 0) return null;
@@ -44,6 +49,14 @@ export default function Flyout() {
       <button className="download-button" onClick={handleDownload}>
         Download selected
       </button>
+      <a
+        ref={downloadRef}
+        href={downloadUrl}
+        download={`${selectedItems.length}_heroes.csv`}
+        style={{ display: 'none' }}
+      >
+        Download
+      </a>
     </div>
   );
 }
